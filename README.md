@@ -1,4 +1,4 @@
-# Para esta tercera entrega del proyecto se usa django, por tanto es necesario instalar a traves del comando:
+# About 
 
-pip install django
+Artificial intelligence project for anime recommendations.
 
