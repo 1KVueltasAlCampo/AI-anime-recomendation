@@ -1,13 +1,13 @@
 import dash
 import dash_core_components as dcc
+import dash_bootstrap_components as dbc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import sys
 import os
 import pandas as pd 
 
-
-app = dash.Dash('app_name')
+app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 df_series = pd.read_csv('dfSeries.csv')
 
@@ -31,7 +31,6 @@ app.layout = html.Div([
     html.Br(),
     html.Br(),
     html.Div(id='my-output'),
-
 ])
 
 def fusion(first,second):
@@ -65,7 +64,7 @@ def fusionByNameList(animeList):
 def callback(current_options):
     if(current_options):
         return html.Div([
-                generate_table(recommendation(fusionByNameList(current_options)))
+                generate_card_grid(recommendation(fusionByNameList(current_options)))
             ])
 
 
@@ -91,10 +90,88 @@ def generate_table(dataframe, max_rows=10):
         ])
     ])
     
+def generate_card_grid(dataframe, max_rows=10):
+    return html.Div([
+                (dbc.Card(
+                    [
+                        dbc.CardHeader(dataframe.iloc[i]['name'] , className="card-title"),
+                        dbc.CardBody(
+                            [
+                                html.Div(
+                                    "Episodes: " + str(dataframe.iloc[i]['episodes']),
+                                    className="card-text",
+                                ),
+                                html.Div(
+                                    "Rating: " + str(dataframe.iloc[i]['rating']),
+                                    className="card-text",
+                                ),
+                                html.Div(
+                                    "Members: " + str(dataframe.iloc[i]['members']),
+                                    className="card-text",
+                                ),
+                                html.Div(
+                                    "Genres: " + showGenres(dataframe.iloc[i]),
+                                ),
+                                dbc.Button("Go watch", color="primary"),
+                            ]
+                        ),     
 
+                    ],
+                    style={"width": "18rem"},
+                )) for i in range(min(len(dataframe), max_rows))
+            ], className="d-flex row")
 
+""" def showGenres (dataframe):
+    genres = []
+    if (int(dataframe['Comedy']) == 1):
+        genres.append(dbc.ListGroupItem("Comedy", color="info", class_name='h-50'))
+    if (int(dataframe['Action']) == 1):
+        genres.append(dbc.ListGroupItem("Action", color="info", class_name='h-25'))
+    if (int(dataframe['Adventure']) == 1):
+        genres.append(dbc.ListGroupItem("Adventure", color="info", class_name='h-25'))
+    if (int(dataframe['Sci-Fi']) == 1):
+        genres.append(dbc.ListGroupItem("Sci-Fi", color="info", class_name='h-25'))
+    if (int(dataframe["Fantasy"]) == 1):
+        genres.append(dbc.ListGroupItem("Fantasy", color="info", class_name='h-25'))
+    if (int(dataframe['Shounen']) == 1):
+        genres.append(dbc.ListGroupItem("Shounen", color="info", class_name='h-25'))
+    if (int(dataframe['Romance']) == 1):
+        genres.append(dbc.ListGroupItem("Romance", color="info", class_name='h-25'))
+    if (int(dataframe['Drama']) == 1):
+        genres.append(dbc.ListGroupItem("Drama", color="info", class_name='h-25'))
+    if (int(dataframe['Supernatural']) == 1):
+        genres.append(dbc.ListGroupItem("Supernatural", color="info", class_name='h-25'))
+    if (int(dataframe['Magic']) == 1):
+        genres.append(dbc.ListGroupItem("Magic", color="info", class_name='h-25'))
+    if (int(dataframe['Kids']) == 1):
+        genres.append(dbc.ListGroupItem("Kids", color="info", class_name='h-25'))
+    return genres """
 
-
+def showGenres (dataframe):
+    genres = ""
+    if (int(dataframe['Comedy']) == 1):
+        genres += "Comedy, "
+    if (int(dataframe['Action']) == 1):
+        genres += "Action, "
+    if (int(dataframe['Adventure']) == 1):
+        genres += "Adventure, "
+    if (int(dataframe['Sci-Fi']) == 1):
+        genres += "Sci-Fi, "
+    if (int(dataframe["Fantasy"]) == 1):
+        genres += "Fantasy, "
+    if (int(dataframe['Shounen']) == 1):
+        genres += "Shounen, "
+    if (int(dataframe['Romance']) == 1):
+        genres += "Romance, "
+    if (int(dataframe['Drama']) == 1):
+        genres += "Drama, "
+    if (int(dataframe['Supernatural']) == 1):
+        genres += "Supernatural, "
+    if (int(dataframe['Magic']) == 1):
+        genres += "Magic, "
+    if (int(dataframe['Kids']) == 1):
+        genres += "Kids, "
+    return genres
 
 
 if __name__ == '__main__':
