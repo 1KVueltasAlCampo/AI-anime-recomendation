@@ -30,7 +30,8 @@ app.layout = html.Div([
     ),
     html.Br(),
     html.Br(),
-    html.Div(id='my-output')
+    html.Div(id='my-output'),
+
 ])
 
 def fusion(first,second):
@@ -63,7 +64,32 @@ def fusionByNameList(animeList):
 )
 def callback(current_options):
     if(current_options):
-        return str(fusionByNameList(current_options))
+        return html.Div([
+                generate_table(recommendation(fusionByNameList(current_options)))
+            ])
+
+
+def recommendation(x):
+    import joblib
+    knn = joblib.load("knn.joblib")
+    x = x.drop('name',axis=1)
+    x = x.drop('Unnamed: 0',axis=1)
+    predicted_value = int(knn.predict(x))
+    category=df_series[df_series.Classification == predicted_value]
+    category = category.drop('Unnamed: 0',axis=1)
+    return category.sort_values(by=['members','rating'], ascending=False)
+
+def generate_table(dataframe, max_rows=10):
+    return html.Table([
+        html.Thead(
+            html.Tr([html.Th(col) for col in dataframe.columns])
+        ),
+        html.Tbody([
+            html.Tr([
+                html.Td(dataframe.iloc[i][col]) for col in dataframe.columns
+            ]) for i in range(min(len(dataframe), max_rows))
+        ])
+    ])
     
 
 
