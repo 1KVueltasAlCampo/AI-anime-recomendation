@@ -7,7 +7,7 @@ import sys
 import os
 import pandas as pd 
 
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, title='Anime discover', external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 df_series = pd.read_csv('dfSeries.csv')
 
@@ -172,4 +172,4 @@ def showGenres (dataframe):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
