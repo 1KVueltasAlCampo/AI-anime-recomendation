@@ -1,13 +1,13 @@
 import dash
-import dash_core_components as dcc
+from dash import dcc
 import dash_bootstrap_components as dbc
-import dash_html_components as html
+from dash import html
 from dash.dependencies import Input, Output, State
 import sys
 import os
 import pandas as pd 
 
-app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
 df_series = pd.read_csv('dfSeries.csv')
 
@@ -20,18 +20,16 @@ df_prepared = df_prepared.drop('Classification', axis=1)
 test = df_series['name'].unique()
 options = [{'label': t, 'value': t} for t in test]
 
-app.layout = html.Div([
-    dcc.Dropdown(
+app.layout = html.Div(
+    [   dcc.Dropdown(
         id='dropdown',
         options=options,
         value='',
         multi = True,
         placeholder="Select one or more animes"
-    ),
-    html.Br(),
-    html.Br(),
+    )  ,
     html.Div(id='my-output'),
-])
+], id="app")
 
 def fusion(first,second):
     fusiondf = first
@@ -112,14 +110,13 @@ def generate_card_grid(dataframe, max_rows=10):
                                 html.Div(
                                     "Genres: " + showGenres(dataframe.iloc[i]),
                                 ),
-                                dbc.Button("Go watch", color="primary"),
                             ]
                         ),     
 
                     ],
-                    style={"width": "18rem"},
+
                 )) for i in range(min(len(dataframe), max_rows))
-            ], className="d-flex row")
+            ], id="cardsContainer")
 
 """ def showGenres (dataframe):
     genres = []
