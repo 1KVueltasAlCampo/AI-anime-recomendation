@@ -11,6 +11,8 @@ body{
     margin: 1rem 2.5rem 2rem 2.5rem;
     padding: 10px;
     filter: drop-shadow(-13px 12px 10px #1E413B);
+    position: relative;
+    z-index: 1;
 }
 
 .Select-placeholder:hover{
@@ -23,8 +25,7 @@ body{
 }
 
 #cardsContainer{
-    position: relative;
-    z-index: -1;
+
 
     margin: 1rem 2rem 1rem 2rem;
     display: flex;
@@ -46,7 +47,7 @@ body{
     border: 1px solid rgba( 255, 255, 255, 0.18 );
     padding: 2rem 1.5rem 2rem 1.5rem;
 
-    overflow-y: auto;
+    overflow-y: scroll;
 
     max-height: 37rem;
 }
